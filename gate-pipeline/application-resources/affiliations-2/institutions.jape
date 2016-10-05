@@ -1,0 +1,18 @@
+Phase:	Institutions
+Input: Affiliation_location Lookup
+
+Options: control = appelt debug=true
+
+Rule: universityOfCITY
+(
+  {Lookup.majorType == "org_base"} ({Lookup.majorType == "org_in"})+ {Affiliation_location.loc_type == "city"}
+):mention
+-->
+:mention.Affiliation = {rule = "universityOfCITY", content = :mention@cleanString},
+:mention{
+  AnnotationSet mentions = (gate.AnnotationSet) bindings.get("mention");
+  Annotation university = mentions.iterator().next();
+  String str = gate.Utils.stringFor(doc, university);
+  System.out.println("Found a university in doc " + doc.getName());
+  System.out.println("-+-+-+-+-+-+-+-+-+-+-");
+}

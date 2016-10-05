@@ -1,0 +1,27 @@
+Phase:	Institution_Units
+Input: Token Lookup Affiliation_univ
+
+Options: control = appelt debug=true
+
+Rule: UnitINXandY
+(
+  ({Lookup.majorType == "org_pre"})? {Lookup.majorType == "org_unit"} ({Lookup.majorType == "org_in"})+ ({Token.orth == "upperInitial", !Lookup.minorType == "univ"})[1,3] ({Token.string == "and"} ({Token.orth=="upperInitial", !Lookup.minorType == "univ"})[1,3])?
+):mention
+-->
+:mention.Affiliation_unit = {rule="UnitINXandY"}
+
+Rule: UnitINXandY2
+(
+  ({Lookup.majorType == "org_pre"})? {Lookup.majorType == "org_unit"} ({Lookup.majorType == "org_in"})+ ({Token.orth == "upperInitial", !Lookup.minorType == "univ"})[1,3] 
+  {Token.string == ","}({Token.orth == "upperInitial", !Lookup.minorType == "univ"})[1,3]
+  {Token.string == "and"} ({Token.orth=="upperInitial", !Lookup.minorType == "univ"})[1,3]
+):mention
+-->
+:mention.Affiliation_unit = {rule="UnitINXandY2"}
+
+Rule: UnitINXandY3
+(
+  {Lookup.majorType == "org_unit"} ({Lookup.majorType == "org_in"})+ {Token.orth == "allCaps"}
+):mention
+-->
+:mention.Affiliation_unit = {rule="UnitINXandY3"}

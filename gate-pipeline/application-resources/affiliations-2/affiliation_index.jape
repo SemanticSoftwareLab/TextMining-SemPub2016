@@ -1,0 +1,41 @@
+Phase:	Affiliation_index
+Input: Affiliation_univ Token
+
+Options: control = first debug=true
+
+Rule: author_index
+(
+    ({Token.kind == "number"}):number
+
+    ({Token})[0,10]
+
+    (	({Affiliation_univ}):affiliation
+    ):span
+
+)
+:mention
+-->
+{
+    try{
+        AnnotationSet set = (gate.AnnotationSet) bindings.get("affiliation");
+        Annotation aff = set.iterator().next();
+
+        AnnotationSet numbers = (gate.AnnotationSet) bindings.get("number");
+        Annotation number = numbers.iterator().next();
+
+        FeatureMap feats = aff.getFeatures();
+        
+		String content = doc.getContent().getContent(number.getStartNode().getOffset(),number.getEndNode().getOffset()).toString();
+		content = gate.Utils.cleanString(content);
+        feats.put("index", content);
+        
+        AnnotationSet set2 = (gate.AnnotationSet) bindings.get("span");
+        Annotation span = set2.iterator().next();
+        
+        outputAS.add(number.getEndNode().getOffset()+1, span.getEndNode().getOffset(), "Affiliation_univ", feats);
+        inputAS.remove(aff);
+        
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}

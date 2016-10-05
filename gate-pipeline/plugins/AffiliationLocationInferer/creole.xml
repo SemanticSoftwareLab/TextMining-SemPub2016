@@ -1,0 +1,13 @@
+<!-- creole.xml AffiliationLocationInferer -->
+<!--  bahar, 29/4/2016 -->
+
+<!--
+This file just references the JAR file that contains the compiled resource.
+Configuration is contained in the @CreoleResource annotation on 
+info.semanticsoftware.sempub2016.LocationInferer.
+-->
+
+<CREOLE-DIRECTORY>
+  <JAR SCAN="true">AffiliationLocationInferer.jar</JAR>
+  <IVY/>
+</CREOLE-DIRECTORY>

@@ -1,0 +1,27 @@
+Phase:	Affiliations_cleanup
+Input: Metadata_body Affiliation_univ Affiliation_unit
+
+Options: control = appelt debug=true
+
+Rule: notInMetadata
+(
+   {Affiliation_univ notWithin Metadata_body}
+):mention
+-->
+{
+    AnnotationSet set = bindings.get("mention");
+    Annotation ann = set.iterator().next();
+    inputAS.remove(ann);
+}
+
+Rule: notInMetadata2
+(
+   {Affiliation_unit notWithin Metadata_body}
+):mention
+-->
+{
+    AnnotationSet set = bindings.get("mention");
+    Annotation ann = set.iterator().next();
+    inputAS.remove(ann);
+}
+

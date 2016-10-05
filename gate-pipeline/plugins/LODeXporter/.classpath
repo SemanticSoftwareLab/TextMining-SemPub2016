@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/usr/local/durmtools/GATE/gate/bin/gate.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/ant.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/ant-launcher.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/antlr.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/asm-debug-all.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/commons-beanutils-core.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/commons-cli.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/commons-codec.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/dom4j.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/hamcrest-core.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/httpclient.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/httpcore.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/jaxen.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/jcl-over-slf4j.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/jena-arq.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/jena-core.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/jena-iri.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/jena-tdb.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/jFormatString.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/log4j.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/slf4j-log4j12.jar"/>
+	<classpathentry kind="lib" path="/home/bahar/Repository/components/lib/xercesImpl.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

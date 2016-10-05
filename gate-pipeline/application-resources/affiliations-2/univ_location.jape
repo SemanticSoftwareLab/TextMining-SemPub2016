@@ -1,0 +1,35 @@
+Imports: {
+  import java.net.*;
+}
+Phase:	Univ_location
+Input: Affiliation_univ Location
+
+Options: control = appelt debug=true
+
+Rule: UnivCountry
+(
+ ({Affiliation_univ}):univ ({Location.locType != "country"})*
+ ({Location.locType == "country"}):loc
+):mention
+-->
+:mention{
+  try{
+	AnnotationSet locSet = (gate.AnnotationSet) bindings.get("loc");
+	Annotation location = locSet.iterator().next();
+
+	AnnotationSet univSet = (gate.AnnotationSet) bindings.get("univ");
+	Annotation affiliation = univSet.iterator().next();
+	FeatureMap aff_feats = affiliation.getFeatures();
+
+	String content = doc.getContent().getContent(location.getStartNode().getOffset(),location.getEndNode().getOffset()).toString();
+	//aff_feats.put("locatedIn", gate.Utils.cleanString(content));
+	String finalString = "http://ceur-ws.org/country/" + gate.Utils.cleanString(content).trim().toLowerCase().replace(' ', '-');
+	aff_feats.put("locationURI", new java.net.URI(finalString));
+
+
+    } catch (URISyntaxException e1) {
+		e1.printStackTrace();
+	}catch(Exception e2){
+        e2.printStackTrace();
+    }
+}

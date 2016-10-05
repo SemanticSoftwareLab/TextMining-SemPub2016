@@ -1,0 +1,40 @@
+Imports: {
+  import java.util.*;
+}
+
+Phase:	Affiliation_location
+Input: Metadata_body DBpediaNE Location
+
+Options: control = appelt debug=true
+
+Rule: cityORcountry
+(
+  {DBpediaNE within Metadata_body}
+):mention
+-->
+:mention
+{
+ try {
+    AnnotationSet span = (gate.AnnotationSet) bindings.get("mention");
+    AnnotationSet mentions = inputAS.getContained(span.firstNode().getOffset(), span.lastNode().getOffset()).get("DBpediaNE");
+    Annotation namedEntity = mentions.iterator().next();
+    FeatureMap neFeats = namedEntity.getFeatures(); 
+    List<String> typesList = (List<String>) neFeats.get("types");
+
+    if(typesList.size() > 1){
+      if(typesList.contains("DBpedia:Country")){
+	//System.out.println("Found a country NE: " + (String) neFeats.get("URI"));
+	neFeats.put("loc_type", "country");
+	gate.Utils.addAnn(outputAS, namedEntity, "Affiliation_location", neFeats);
+        //System.out.println("---------------------");
+      } else if(typesList.contains("DBpedia:City")){
+	//System.out.println("Found a city NE: " + (String) neFeats.get("URI"));
+	neFeats.put("loc_type", "city");
+	gate.Utils.addAnn(outputAS, namedEntity, "Affiliation_location", neFeats);
+        //System.out.println("---------------------");
+      }
+    }     
+  } catch (Exception e){
+      e.printStackTrace();
+  }
+}

@@ -1,0 +1,15 @@
+Phase: Deictics
+Input: Lookup Token
+
+Options: control = appelt debug=true
+
+Rule: Deictic
+// This paper...
+(
+	{Token.category == "DT", Token.orth == "upperInitial"}
+	{Lookup.majorType ==	"DEICTIC"}
+)
+:mention
+-->
+ :mention.Deictic = {rule = "DetDeictic", content = :mention@string}
+

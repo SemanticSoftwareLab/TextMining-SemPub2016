@@ -1,0 +1,18 @@
+Phase:	Affiliation_Longest
+Input: Token Affiliation_unit Affiliation_univ
+
+Options: control = appelt debug=true
+
+Rule: UnitPUNCTUniv
+(
+   {Affiliation_unit} (({Token.kind == "punctuation"}{Affiliation_unit}))? {Token.kind == "punctuation"} {Affiliation_univ}
+):mention
+-->
+:mention.Affiliation_final = {rule="UnitPUNCTUniv"}
+
+Rule: UnivPUNCTUnit
+(
+   {Affiliation_univ} {Token.kind == "punctuation"} {Affiliation_unit}
+):mention
+-->
+:mention.Affiliation_final = {rule="UnivPUNCTUnit"}

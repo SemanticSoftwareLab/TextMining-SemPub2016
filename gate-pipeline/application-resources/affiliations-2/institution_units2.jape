@@ -1,0 +1,39 @@
+Phase:	Institution_Units
+Input: Token Lookup
+
+Options: control = appelt debug=true
+
+Rule: UnitINXandY
+(
+  {Lookup.majorType == "org_unit"} ({Lookup.majorType == "org_in"})+ {Token.category == "NNP"} ({Token.string == ","}{Token.category == "NNP"})* (({Token.string == "and"}|{Token.string == "&"}){Token.category == "NNP"})?
+):mention
+-->
+:mention.Affiliation_unit = {rule="BaseINXandY"}
+
+Rule: UnitINDom
+(
+   {Lookup.majorType == "org_base"} {Lookup.majorType == "org_in"} {Lookup.majorType == "org_domain"}
+):mention
+-->
+:mention.Affiliation_unit = {rule="BaseINDom"}
+
+Rule: DomUnit
+(
+   {Lookup.majorType == "org_domain"} {Lookup.majorType == "org_base"}
+):mention
+-->
+:mention.Affiliation_unit = {rule="DomBase"}
+
+Rule: NounUnit1
+(
+   ({Token.orth == "upperInitial"})[1,3] {Lookup.majorType == "org_base"}
+):mention
+-->
+:mention.Affiliation_unit = {rule="NounBase"} 
+
+Rule: NounUnit2
+(
+   ({Token.orth == "upperInitial"})[1,3] {Lookup.majorType == "org_base"} ({Lookup.majorType == "org_in"})+ ({Token.orth == "upperInitial"} | {Lookup.majorType == "org_domain"})? ({Token.string == ","}{Token.category == "NNP"})* (({Token.string == "and"}|{Token.string == "&"})({Token.orth == "upperInitial"})[1,3])?
+):mention
+-->
+:mention.Affiliation_unit = {rule="NounBase"} 

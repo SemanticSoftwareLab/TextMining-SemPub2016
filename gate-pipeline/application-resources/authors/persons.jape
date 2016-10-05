@@ -1,0 +1,11 @@
+phase: Authors
+Input: Person Metadata_body Author
+options: control=appelt
+
+Rule: AuthorPersons
+(
+	{Person within Metadata_body, Person notWithin Author}
+)
+:mention
+--> 
+:mention.Author = {rule="AuthorPersons"}

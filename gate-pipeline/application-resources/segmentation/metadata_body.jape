@@ -1,0 +1,22 @@
+Phase:	Metadata_body
+Input: abstract article-title
+
+Options: control = appelt debug=true
+
+Rule: metadata_body
+(
+({article-title}):left
+({abstract}):right
+):mention
+-->
+{
+try{
+    long start = ((AnnotationSet) bindings.get("left")).lastNode().getOffset();
+    long end   = ((AnnotationSet) bindings.get("right")).firstNode().getOffset();
+    FeatureMap features = Factory.newFeatureMap();
+    features.put("rule", "metadata_body");
+    outputAS.add(start, end, "Metadata_body", features);
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}

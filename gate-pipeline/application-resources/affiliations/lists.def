@@ -1,0 +1,9 @@
+org_base.lst:org_base:univ
+org_in.lst:org_in
+org_domain.lst:org_domain
+org_unit.lst:org_unit:univ
+missing_city.lst:location
+org_pre.lst:org_pre:univ
+person_male.lst:person_first:male
+person_female.lst:person_first:female
+deictic.lst:DEICTIC

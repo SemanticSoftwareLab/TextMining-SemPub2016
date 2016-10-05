@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/usr/local/durmtools/GATE/gate/bin/gate.jar"/>
+	<classpathentry kind="lib" path="lib/gson.jar"/>
+	<classpathentry kind="lib" path="lib/jena-arq.jar"/>
+	<classpathentry kind="lib" path="lib/jena-core.jar"/>
+	<classpathentry kind="lib" path="lib/jena-iri.jar"/>
+	<classpathentry kind="lib" path="lib/jena-tdb.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

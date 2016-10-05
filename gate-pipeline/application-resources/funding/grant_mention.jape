@@ -1,0 +1,82 @@
+Phase:	Grant_mention
+Input: Token
+
+Options: control = appelt debug=true
+
+// grant 123
+Rule: grant_1
+(
+	{Token.root == "grant"}
+	({Token.root == "agreement"})?
+	({Token.root == "number"})?
+	({Token.kind == "number"}
+	({Token.kind == "punctuation", Token.string == "."}{Token.kind == "number"})*):number
+)
+:mention
+-->
+:number.Grant = {rule = "grant_1", number = :number@cleanString}
+
+// grant agreement no. 123
+// grant no. 123
+Rule: grant_2
+(
+	{Token.root == "grant"}
+	({Token.root == "agreement"})?
+	({Token.root == "no"} | {Token.root == "n"}{Token.kind == "symbol", Token.string == "°"})
+	({Token.kind == "punctuation", Token.string == "."})?
+	({Token.kind == "number"}):number
+)
+:mention
+-->
+:number.Grant = {rule = "grant_2", number = :number@cleanString}
+
+// grant agreement no. 123
+// grant no. 123
+Rule: grant_3
+(
+	{Token.root == "grant"}
+	({Token.root == "agreement"})?
+	({Token.root == "no"} | {Token.root == "n"}{Token.kind == "symbol", Token.string == "°"} | {Token.root == "n"})
+	({Token.kind == "punctuation", Token.string == "."})?
+	({Token.orth == "allCaps"}({Token.kind == "number"})?
+	({Token.kind == "punctuation", Token.string == "-"} |{Token.kind == "punctuation", Token.string == "/"})
+	{Token.kind == "number"}):number
+)
+:mention
+-->
+:number.Grant = {rule = "grant_3", number = :number@cleanString}
+
+// grant ABC/123
+// grant ABC-123
+Rule: grant_4
+(
+	{Token.root == "grant"}
+	({Token.root == "number"})?
+	({Token.orth == "allCaps"}({Token.kind == "number"})?
+	({Token.kind == "punctuation", Token.string == "-"} |{Token.kind == "punctuation", Token.string == "/"})?
+	{Token.kind == "number"}):number
+
+)
+:mention
+-->
+:number.Grant = {rule = "grant_4", number = :number@cleanString}
+
+// grant ABC/123
+// grant ABC-123
+Rule: grant_5
+(
+	{Token.root == "grant"}
+	({Token.root == "number"})?
+	({Token.orth == "allCaps"}
+	({Token.kind == "punctuation", Token.string == "-"} |{Token.kind == "punctuation", Token.string == "/"})
+	{Token.orth == "allCaps"}{Token.kind == "number"}
+	({Token.kind == "punctuation", Token.string == "-"} |{Token.kind == "punctuation", Token.string == "/"})
+	({Token.orth == "allCaps"}|{Token.kind == "number"})):number
+
+)
+:mention
+-->
+:number.Grant = {rule = "grant_5", number = :number@cleanString}
+
+//grant EP/ED21352/1
+

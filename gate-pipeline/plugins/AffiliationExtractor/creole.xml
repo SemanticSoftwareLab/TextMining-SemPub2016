@@ -1,0 +1,12 @@
+<!-- creole.xml AffiliationExtractor -->
+<!--  baharsateli, 16/5/2015 -->
+
+<!--
+This file just references the JAR file that contains the compiled resource.
+Configuration is contained in the @CreoleResource annotation on 
+info.semanticsoftware.nlp.relations.RelationExtractor.
+-->
+
+<CREOLE-DIRECTORY>
+  <JAR SCAN="true">AffiliationExtractor.jar</JAR>
+</CREOLE-DIRECTORY>

@@ -1,0 +1,12 @@
+<!-- creole.xml AuthorAffiliationInferer -->
+<!--  baharsateli, 25/5/2016 -->
+
+<!--
+This file just references the JAR file that contains the compiled resource.
+Configuration is contained in the @CreoleResource annotation on 
+info.semanticsoftware.sempub2016.AuthorAffiliationInferer.
+-->
+
+<CREOLE-DIRECTORY>
+  <JAR SCAN="true">AuthorAffiliationInferer.jar</JAR>
+</CREOLE-DIRECTORY>

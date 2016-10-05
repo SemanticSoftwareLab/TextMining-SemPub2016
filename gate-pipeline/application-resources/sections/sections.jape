@@ -1,0 +1,49 @@
+phase: Sections
+Input: Sentence
+options: control=once
+
+Rule: Section
+Priority:20
+({Sentence}):section
+--> 
+{
+    AnnotationSet sections = inputAS.get("h1");
+    List<Annotation> sectOrdered = gate.Utils.inDocumentOrder(sections);
+    int sectNumber = 1;
+    for( Annotation sectAnn: sectOrdered ) {
+	if( sectAnn.getFeatures().get("confidence") != null ) 
+	    continue;
+	FeatureMap features = Factory.newFeatureMap();
+	Long startOffset = sectAnn.getStartNode().getOffset();
+	Long endOffset = sectAnn.getEndNode().getOffset();
+
+	// first number is the section's number
+	AnnotationSet numbers = gate.Utils.getContainedAnnotations(inputAS, sectAnn, "Number");
+	List<Annotation> numbersOrdered = gate.Utils.inDocumentOrder(numbers);
+	if( numbersOrdered.size() > 0 ) {
+	    Annotation firstNumber = numbersOrdered.get(0);
+	    sectNumber = (int)Math.round((double)firstNumber.getFeatures().get("value"));
+	    startOffset = firstNumber.getEndNode().getOffset()+1;
+	}
+	features.put( "Number", sectNumber++ );
+	// add caption content string
+	try {
+	    String title = doc.getContent().getContent(startOffset, endOffset).toString();
+	    features.put("content", title.trim());
+	} catch( InvalidOffsetException ioe ) {
+	    System.out.println("Error getting caption content");
+	}
+	gate.Utils.addAnn(outputAS, sectAnn.getStartNode().getOffset(), endOffset, "Section", features);	
+    }
+    if( sections.size() == 0 ) {
+	// special "abstract-only" paper, from the SemPub rules:
+	//   "Abstracts must NOT be included in the output, unless the paper is abstract-only; 
+	//   in that case, the output has to indicate one section titled 'Abstract' and numbered '1'"
+	// System.out.println("Abstract-only paper!");
+	FeatureMap features = Factory.newFeatureMap();
+	features.put( "Number", 1 );
+	features.put( "content", "Abstract" );
+	gate.Utils.addAnn(outputAS, 0, 1, "Section", features);
+    }
+}
+

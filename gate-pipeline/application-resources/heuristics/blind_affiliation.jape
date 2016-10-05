@@ -1,0 +1,20 @@
+phase: Blind_Affiliation
+Input: Author_longest Token email Location
+options: control=once
+
+Rule: Blind_Affiliation
+(
+ {Author_longest} (({Token, !Location, !email})+):aff ({Location} | {email})
+)
+:mention
+--> 
+{
+	AnnotationSet set = bindings.get("aff");
+	Long startOffset = set.firstNode().getOffset();
+    Long endOffset = set.lastNode().getOffset();
+	//System.out.println("Controller Corpus");
+	FeatureMap features = Factory.newFeatureMap();
+	features.put("content", gate.Utils.stringFor(doc, startOffset, endOffset));
+	gate.Utils.addAnn(outputAS, startOffset, endOffset, "Affiliation_univ", features);
+
+}

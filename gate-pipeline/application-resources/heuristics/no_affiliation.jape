@@ -1,0 +1,20 @@
+phase: No_University_Flag
+Input: article-title
+options: control=once
+
+Rule: FlagAnnotation
+(
+ {article-title} 
+)
+:mention
+--> 
+{
+	AnnotationSet affSet = doc.getAnnotations().get("Affiliation_univ");
+	/*if(affSet.size() == 0){
+		System.out.println("No affiliations in " + doc.getName());
+	}*/
+	FeatureMap features = Factory.newFeatureMap();
+	gate.Utils.addAnn(outputAS, 0L, 0L, "flag", features);
+	doc.getFeatures().put("flag", "true");
+
+}

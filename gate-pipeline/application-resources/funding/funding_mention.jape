@@ -1,0 +1,35 @@
+Phase:	University_mention
+Input: Lookup Token Organization Deictic
+
+Options: control = appelt debug=true
+
+Rule: funded_by
+(
+	{Deictic}
+	({Token.category == "VBZ"} | {Token.category == "VBD"})
+	({Token.category == "VBN"})?
+	({Token.category == "RB"})?
+	({Token.root == "support"} | {Token.root == "fund"})
+	({Token.category == "IN"})
+	({Token.category == "DT"})?
+	({Organization} | {Token.orth == "upperInitial"}):org
+)
+:mention
+-->
+:mention.Funding_agency = {rule = "funded_by1", title = :org@cleanString}
+
+Rule: funded_by
+(
+	{Deictic}
+	({Token})+
+	({Token.root == "support"} | {Token.root == "fund"})
+	({Token.category == "IN"})
+	({Token.root == "part"}	{Token.category == "IN"})?
+	({Token.category == "DT"})?
+	({Organization} | {Token.orth == "upperInitial"}
+	({Token.root == "and"} ({Organization} | {Token.orth == "upperInitial"}))*
+	):org
+)
+:mention
+-->
+:mention.Funding_agency = {rule = "funded_by2", title = :org@cleanString}

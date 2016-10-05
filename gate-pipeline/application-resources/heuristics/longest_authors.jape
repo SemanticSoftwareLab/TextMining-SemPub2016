@@ -1,0 +1,22 @@
+phase: Author_longest
+Input: Author Token
+options: control=appelt
+
+Rule: Author_longest1
+Priority: 100
+(
+
+	{Author} ({Token.kind == "number"})? ( {Token.string == ","} {Author} ({Token.kind == "number"})?)+ ({Token.string == ","})? ({Token.string == "and"})? {Author}
+)
+:mention
+--> 
+:mention.Author_longest = {rule="Author_longest1"}
+
+Rule: Author_longest2
+Priority: 50
+(
+	({Author})+
+)
+:mention
+--> 
+:mention.Author_longest = {rule="Author_longest2"}

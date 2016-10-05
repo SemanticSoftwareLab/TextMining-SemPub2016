@@ -1,0 +1,53 @@
+Phase:	Institutions
+Input: Affiliation_location Lookup Token
+
+Options: control = appelt debug=true
+
+Rule: BaseINCity
+(
+  ({Lookup.majorType=="org_pre"})? {Lookup.majorType == "org_base"} ({Token.orth == "upperInitial", !Lookup.majorType == "org_base"})? ({Lookup.majorType == "org_in"})+ ({Affiliation_location.loc_type == "city"} | {Lookup.majorType == "location"})
+):mention
+-->
+:mention.Affiliation_univ = {rule = "BaseINCity", content = :mention@cleanString},
+:mention{
+  //AnnotationSet mentions = (gate.AnnotationSet) bindings.get("mention");
+  //Annotation university = mentions.iterator().next();
+  //String str = gate.Utils.stringFor(doc, university);
+  //System.out.println("Found a university in doc " + doc.getName());
+  //System.out.println("-+-+-+-+-+-+-+-+-+-+-");
+}
+
+Rule: BaseInPreLoc
+(
+  {Lookup.majorType == "org_base"} ({Lookup.majorType == "org_in"})+ ({Lookup.majorType == "loc_key", Lookup.minorType == "pre"})[1,2] {Lookup.majorType == "location"}
+):mention
+-->
+:mention.Affiliation_univ = {rule = "BaseInPreLoc", content = :mention@cleanString}
+
+Rule: CityBase
+(
+	({Affiliation_location.loc_type == "city"} | {Lookup.majorType == "location"}) ({Lookup.majorType == "org_base"})[1,2]
+):mention
+-->
+:mention.Affiliation_univ = {rule = "CityBase", content = :mention@cleanString}
+
+Rule: BaseCity
+(
+    ({Lookup.majorType=="org_pre"})? {Lookup.majorType == "org_base"} ({Affiliation_location.loc_type == "city"} | {Lookup.majorType == "location"}) 
+):mention
+-->
+:mention.Affiliation_univ = {rule = "BaseCity", content = :mention@cleanString},
+:mention{
+  /*AnnotationSet mentions = (gate.AnnotationSet) bindings.get("mention");
+  Annotation university = mentions.iterator().next();
+  String str = gate.Utils.stringFor(doc, university);
+  System.out.println("Found a university in doc " + doc.getName());
+  System.out.println("-+-+-+-+-+-+-+-+-+-+-");*/
+}
+
+Rule: GazBase
+(
+  ({Lookup.majorType == "org_pre"})[1,2] {Lookup.majorType == "org_base"}
+):mention
+-->
+:mention.Affiliation_univ = {rule = "GazBase", content = :mention@cleanString}

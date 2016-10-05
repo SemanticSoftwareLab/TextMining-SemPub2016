@@ -1,0 +1,39 @@
+Imports: {
+  import java.util.*;
+}
+
+Phase:	Institutions_namedentities
+Input: Metadata_body Lookup DBpediaNE
+
+Options: control = appelt debug=true
+
+Rule: dbpediaUniversity
+(
+  {DBpediaNE within Metadata_body}
+):mention
+-->
+:mention
+{
+ try {
+    AnnotationSet span = (gate.AnnotationSet) bindings.get("mention");
+    AnnotationSet mentions = inputAS.getContained(span.firstNode().getOffset(), span.lastNode().getOffset()).get("DBpediaNE");
+    Annotation namedEntity = mentions.iterator().next();
+    FeatureMap neFeats = namedEntity.getFeatures(); 
+    List<String> typesList = (List<String>) neFeats.get("types");
+
+    if(typesList.size() > 1){
+      if(typesList.contains("DBpedia:University")){
+	gate.Utils.addAnn(outputAS, namedEntity, "Affiliation_univ", neFeats);
+      }
+    }
+  } catch (Exception e){
+      e.printStackTrace();
+  }
+}
+
+Rule: annieUniversity
+(
+  {Lookup.minorType == "university", Lookup within Metadata_body}
+):mention
+-->
+:mention.Affiliation = {rule="annieUniversity", content = :mention@cleanString}

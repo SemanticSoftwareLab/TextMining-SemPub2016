@@ -1,0 +1,15 @@
+phase: Authors_cleanup
+Input: Author Metadata_body
+options: control=appelt
+
+Rule: AuthorCleanup
+(
+	{Author notWithin Metadata_body}
+)
+:mention
+-->
+{
+    AnnotationSet set = bindings.get("mention");
+    Annotation ann = set.iterator().next();
+    inputAS.remove(ann);
+}

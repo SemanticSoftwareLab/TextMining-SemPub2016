@@ -1,0 +1,13 @@
+phase: Authors
+Input: Token Lookup
+options: control=appelt
+
+Rule: Authors
+(
+ {Lookup.majorType=~"^person"} 
+ ({Token.orth == "upperInitial", Token.length == 1}{Token.string == "."})?
+ ({Token.orth == "upperInitial"} | {Token.string =~ "-$"}{Token.orth == "upperInitial"})
+)
+:mention
+--> 
+:mention.Author = {rule="Authors"}

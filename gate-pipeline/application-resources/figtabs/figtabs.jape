@@ -1,0 +1,61 @@
+phase: FiguresAndTables
+Input: Token caption Number
+options: control=appelt
+
+Rule: FigOrTable
+({caption}):caption
+--> 
+{
+    String type;
+    AnnotationSet captAnnos = bindings.get("caption");
+    FeatureMap features = Factory.newFeatureMap();
+    Long startOffset = captAnnos.firstNode().getOffset();
+    Long endOffset = captAnnos.lastNode().getOffset();
+
+    // first Token should be "Figure" etc.
+    AnnotationSet tokens = gate.Utils.getContainedAnnotations(inputAS, captAnnos, "Token");
+    List<Annotation> tokensOrdered = gate.Utils.inDocumentOrder(tokens);
+    Annotation firstToken = tokensOrdered.get(0);
+    String tokRoot = (String)firstToken.getFeatures().get("root");
+    if( tokRoot.equals("fig") || tokRoot.equals("figure")) {
+	type = "Figure";
+    } else if( tokRoot.equals("tab") || tokRoot.equals("table")) {
+	type = "Table";
+    } else {
+	type = "UnknownFloat";
+    }
+    
+    // first number is the caption's number
+    AnnotationSet numbers = gate.Utils.getContainedAnnotations(inputAS, captAnnos, "Number");
+    List<Annotation> numbersOrdered = gate.Utils.inDocumentOrder(numbers);
+    Annotation firstNumber = numbersOrdered.get(0);
+    // NOTE: converting to int according to SemPub examples, but numbers could be float ("Fig 3.1: ...")
+    features.put( "Number", Math.round((double)firstNumber.getFeatures().get("value")));
+    
+    // fix start
+    int i = 0;
+    while(tokensOrdered.get(i).getStartNode().getOffset() <  firstNumber.getEndNode().getOffset()) {
+	i++;
+    }
+    // skip any periods, colons etc. after "Fig. X."
+    if( tokensOrdered.get(i).getFeatures().get("kind").equals("punctuation")) i++;
+    try {
+	startOffset = tokensOrdered.get(i).getStartNode().getOffset();
+    } catch( IndexOutOfBoundsException ex ) {
+	// PDFX didn't correctly locate the figure/table caption, try to get the next sentence instead
+	AnnotationSet sents = inputAS.get("Sentence").get(firstNumber.getEndNode().getOffset());
+	List<Annotation> sentsOrdered = gate.Utils.inDocumentOrder(sents);
+	Annotation firstSent = sentsOrdered.get(0);
+	startOffset = firstSent.getStartNode().getOffset();
+	endOffset = firstSent.getEndNode().getOffset();
+    }
+    // add caption content string
+    try {
+	String caption = doc.getContent().getContent(startOffset, endOffset).toString();
+	features.put("content", caption.trim());
+    } catch( InvalidOffsetException ioe ) {
+	System.out.println("Error getting caption content");
+    }
+    gate.Utils.addAnn(outputAS, startOffset, endOffset, type, features);
+}
+

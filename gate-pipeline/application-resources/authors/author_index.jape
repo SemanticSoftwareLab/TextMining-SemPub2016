@@ -1,0 +1,28 @@
+Phase:	Author_index
+Input: Author Token
+
+Options: control = first debug=true
+
+Rule: author_index
+(
+    ({Author}):author
+    ({Token.kind == "number"}):number
+)
+:mention
+-->
+{
+    try{
+        AnnotationSet set = (gate.AnnotationSet) bindings.get("author");
+        Annotation author = set.iterator().next();
+
+        AnnotationSet affs = (gate.AnnotationSet) bindings.get("number");
+        Annotation number = affs.iterator().next();
+
+        FeatureMap feats = author.getFeatures();
+		String content = doc.getContent().getContent(number.getStartNode().getOffset(),number.getEndNode().getOffset()).toString();
+		content = gate.Utils.cleanString(content);
+        feats.put("index", content);
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+}
